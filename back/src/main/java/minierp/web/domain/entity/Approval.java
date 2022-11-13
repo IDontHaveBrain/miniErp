@@ -1,8 +1,9 @@
-package minierp.domain.approval;
+package minierp.web.domain.entity;
 
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Builder
 @Getter

@@ -1,4 +1,4 @@
-package minierp.domain.member;
+package minierp.web.domain.entity;
 
 
 import lombok.*;
