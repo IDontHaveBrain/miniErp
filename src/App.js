@@ -1,18 +1,16 @@
 import React from "react";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Test from "./test";
 import Dashboard from "./component/Dashboard";
+import AppStore from "./store/AppStore";
 
 function App() {
   return (
-      <BrowserRouter>
-          <Header />
-          <SideBar />
-          <Routes>
-              <Route path="/" exact={true} element={<Dashboard />}></Route>
-          </Routes>
-          <Footer />
-      </BrowserRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' exact={true} element={<Test />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
