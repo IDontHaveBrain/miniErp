@@ -1,11 +1,12 @@
 package minierp;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.ldap.LdapProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 
+@EnableConfigurationProperties(value = {LdapProperties.class})
 @SpringBootApplication
 public class MiniErpApplication {
 

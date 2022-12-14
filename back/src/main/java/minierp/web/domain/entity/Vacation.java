@@ -2,6 +2,7 @@ package minierp.web.domain.entity;
 
 
 import lombok.*;
+import minierp.web.domain.entity.member.Member;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
