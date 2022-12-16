@@ -5,6 +5,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Optional;
+
 import static minierp.web.domain.entity.member.QMember.member;
 
 public class MemberCustomRepositoryImpl implements MemberCustomRepository{
@@ -25,5 +27,15 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository{
                 )).from(member)
                 .where(member.username.eq(username))
                 .fetchOne();
+    }
+
+    @Override
+    public Optional<Member> findbyMemberId(String memberId) {
+        return Optional.ofNullable(
+                queryFactory
+                        .selectFrom(member)
+                        .where(member.memberId.eq(Long.valueOf(memberId)))
+                        .fetchOne()
+        );
     }
 }
