@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .formLogin()
                 .usernameParameter("member_Id")
                 .passwordParameter("pw")
-                .defaultSuccessUrl("/api/admin", true)
+                .defaultSuccessUrl("/api/myinfo", true)
                 .and()
                 .logout()
                 .logoutSuccessUrl("/login");

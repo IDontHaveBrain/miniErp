@@ -49,8 +49,6 @@ public class ErpController {
     @GetMapping("/allinfo")
     public List<Member> allinfo(@CurrentUser Member member){
         List<Member> allMember = memberService.getAllMember();
-        System.out.println("zzzzasdasd z");
-
         return allMember;
     }
 }
