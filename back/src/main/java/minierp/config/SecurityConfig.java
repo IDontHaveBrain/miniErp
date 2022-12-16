@@ -25,22 +25,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                //.and()
+                .cors().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
                 .antMatchers("/api/hello").permitAll()
                 .antMatchers("/api/join").permitAll()
-                .antMatchers("/api/allinfo").hasAnyRole(SUPERADMIN.name(), ADMIN.name())
-                .antMatchers("/api/myinfo").hasAnyRole(SUPERADMIN.name(), ADMIN.name(), USER.name())
+                //.antMatchers("/api/allinfo").hasAnyRole(SUPERADMIN.name(), ADMIN.name())
+                //.antMatchers("/api/myinfo").hasAnyRole(SUPERADMIN.name(), ADMIN.name(), USER.name())
+                .antMatchers("/api/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .usernameParameter("member_Id")
-                .passwordParameter("pw")
-                .defaultSuccessUrl("/api/myinfo", true)
-                .and()
-                .logout()
-                .logoutSuccessUrl("/login");
+                .formLogin().disable()
+                .httpBasic().disable();
 
         return http.build();
     }

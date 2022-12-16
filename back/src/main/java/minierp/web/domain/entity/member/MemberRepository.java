@@ -12,4 +12,6 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
 
     public List<Member> findAll();
 
+    public boolean existsMemberByMemberId(Long memberId);
+
 }
