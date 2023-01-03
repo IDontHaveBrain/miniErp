@@ -1,9 +1,14 @@
 package minierp.web.service;
 
+import minierp.jwt.TokenProvider;
 import minierp.web.domain.entity.member.Member;
 import minierp.web.domain.entity.member.MemberRepository;
 import minierp.web.domain.entity.member.RequestMemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,9 +20,15 @@ import static minierp.web.domain.entity.Role.*;
 
 @Service
 public class MemberService {
-
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     @Autowired
     private MemberRepository memberRepository;
+
+    public MemberService(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
+        this.tokenProvider = tokenProvider;
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+    }
 
     public RequestMemberDTO join(RequestMemberDTO member) {
         return memberRepository.findByUsername(member.getUsername());
@@ -47,6 +58,18 @@ public class MemberService {
                 reginfo.getPw(), USER.getValue(), LocalDateTime.now());
         memberRepository.save(newMember);
         return true;
+    }
+
+    public String login(RequestMemberDTO loginInfo) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginInfo.getUsername(), loginInfo.getPw());
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String jwt = tokenProvider.createToken(authentication);
+
+        return jwt;
     }
 
 }
