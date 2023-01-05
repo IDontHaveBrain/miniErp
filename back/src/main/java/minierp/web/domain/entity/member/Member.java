@@ -27,7 +27,8 @@ public class Member implements UserDetails {
     private Long memberId; //사번
 
     @NotNull
-    private String username;
+    @Column(name = "username")
+    private String userName;
     @NotNull
     private String pw;
     @NotNull
@@ -49,6 +50,11 @@ public class Member implements UserDetails {
             authorities.add(new SimpleGrantedAuthority(r));
         });
         return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return getMemberId().toString();
     }
 
     @Override

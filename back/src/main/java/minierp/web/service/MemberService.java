@@ -62,7 +62,7 @@ public class MemberService {
 
     public String login(RequestMemberDTO loginInfo) {
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginInfo.getUsername(), loginInfo.getPw());
+                new UsernamePasswordAuthenticationToken(loginInfo.getMemberId(), loginInfo.getPw());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);

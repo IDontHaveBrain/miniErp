@@ -2,6 +2,7 @@ package minierp.web.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import minierp.jwt.JwtAuthenticationFilter;
 import minierp.web.domain.entity.member.CurrentUser;
 import minierp.web.domain.entity.member.Member;
@@ -19,6 +20,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RequestMapping("/api")
 @RestController
 public class ErpController {
@@ -57,6 +59,7 @@ public class ErpController {
 
     @PostMapping("/signin")
     public ResponseEntity<String> signin(RequestMemberDTO member){
+        log.info("id = {}, pw = {}", member.getMemberId(), member.getPw());
         String jwt = memberService.login(member);
 
         HttpHeaders headers = new HttpHeaders();

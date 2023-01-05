@@ -21,11 +21,11 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository{
                 .select(Projections.constructor(
                         RequestMemberDTO.class,
                         member.memberId,
-                        member.username,
+                        member.userName,
                         member.pw,
                         member.roles
                 )).from(member)
-                .where(member.username.eq(username))
+                .where(member.userName.eq(username))
                 .fetchOne();
     }
 
