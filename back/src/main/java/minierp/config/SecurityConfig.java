@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.SecurityBuilder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,6 +21,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig {
     private final TokenProvider tokenProvider;
 
@@ -41,10 +43,6 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/hello").hasRole(ADMIN.name())
-                .antMatchers("/api/join").permitAll()
-                .antMatchers("/api/test").hasRole(ADMIN.name())
-                //.antMatchers("/api/allinfo").hasAnyRole(SUPERADMIN.name(), ADMIN.name())
-                //.antMatchers("/api/myinfo").hasAnyRole(SUPERADMIN.name(), ADMIN.name(), USER.name())
                 .antMatchers("/api/signin").permitAll()
                 .antMatchers("/api/signup").permitAll()
                 .anyRequest().authenticated()

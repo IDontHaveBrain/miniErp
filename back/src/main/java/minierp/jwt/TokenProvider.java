@@ -1,9 +1,12 @@
 package minierp.jwt;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import minierp.web.domain.entity.member.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -47,11 +50,20 @@ public class TokenProvider implements InitializingBean {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
+        Member member = (Member) authentication.getPrincipal();
+        String memberJson;
+        try {
+            memberJson = new ObjectMapper().writeValueAsString(member);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
         long now = (new Date()).getTime();
         Date validity = new Date(now + this.tokenValidityInMilliseconds);
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
+                .claim("member",memberJson)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setIssuedAt(new Date(now))
                 .setExpiration(validity)
@@ -70,7 +82,13 @@ public class TokenProvider implements InitializingBean {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        Member principal = null;
+        try {
+            principal = new ObjectMapper().readValue(claims.get("member").toString(), Member.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        //User principal = new User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

@@ -19,7 +19,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public static final QMember member = new QMember("member1");
 
-    public final DateTimePath<java.time.LocalDateTime> createdDate = createDateTime("createdDate", java.time.LocalDateTime.class);
+    public final DateTimePath<java.util.Date> createdDate = createDateTime("createdDate", java.util.Date.class);
 
     public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
 

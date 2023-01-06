@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -55,7 +56,7 @@ public class MemberService {
             return false;
         }
         Member newMember = new Member(null,reginfo.getUsername(),
-                reginfo.getPw(), USER.getValue(), LocalDateTime.now());
+                reginfo.getPw(), USER.getValue(), new Date());
         memberRepository.save(newMember);
         return true;
     }

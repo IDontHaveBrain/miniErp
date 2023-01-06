@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -40,11 +42,13 @@ public class ErpController {
     }
 
     @GetMapping("/admin")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<String> admin(){
         return ResponseEntity.ok("admin");
     }
 
     @GetMapping("/myinfo")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Member myinfo(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member userDetails = (Member)principal;
@@ -52,7 +56,9 @@ public class ErpController {
     }
 
     @GetMapping("/allinfo")
+    @Secured("ROLE_ADMIN")
     public List<Member> allinfo(@CurrentUser Member member){
+        log.info("member : {}", member.toString());
         List<Member> allMember = memberService.getAllMember();
         return allMember;
     }
