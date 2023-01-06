@@ -42,7 +42,7 @@ public class ErpController {
     }
 
     @GetMapping("/admin")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> admin(){
         return ResponseEntity.ok("admin");
     }

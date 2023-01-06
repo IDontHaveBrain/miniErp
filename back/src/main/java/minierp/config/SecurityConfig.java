@@ -1,5 +1,7 @@
 package minierp.config;
 
+import minierp.jwt.JwtAccessDeniedHandler;
+import minierp.jwt.JwtAuthenticationEntryPoint;
 import minierp.jwt.JwtAuthenticationFilter;
 import minierp.jwt.TokenProvider;
 import org.springframework.context.annotation.Bean;
@@ -24,9 +26,13 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig {
     private final TokenProvider tokenProvider;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    public SecurityConfig(TokenProvider tokenProvider) {
+    public SecurityConfig(TokenProvider tokenProvider, JwtAccessDeniedHandler jwtAccessDeniedHandler, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.tokenProvider = tokenProvider;
+        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
     @Bean
@@ -38,15 +44,25 @@ public class SecurityConfig {
         http
                 .cors().disable()
                 .csrf().disable()
+
+                // jwt 인증 예외 처리.
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+                .and()
+                // jwt 인증 필터 등록.
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+                // 세선 미사용 설정.
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                // 권한 설정.
                 .authorizeRequests()
                 .antMatchers("/api/hello").hasRole(ADMIN.name())
                 .antMatchers("/api/signin").permitAll()
                 .antMatchers("/api/signup").permitAll()
                 .anyRequest().authenticated()
                 .and()
+                //
                 .formLogin().disable()
                 .httpBasic().disable();
 

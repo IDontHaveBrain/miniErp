@@ -22,6 +22,7 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException {
         Optional<Member> member = memberRepository.findbyMemberId(memberId);
+        /*
         if (member.isPresent()) {
 
             Member authMember = member.get();
@@ -29,7 +30,11 @@ public class CustomUserDetailService implements UserDetailsService {
 
             return authMember;
         }
-        return null;
+         */
+        member.ifPresentOrElse(
+                authMember -> authMember.setPw(passwordEncoder.encode(authMember.getPw())),
+                () -> { throw new UsernameNotFoundException("User not found");}
+        );
+        return member.get();
     }
-
 }
