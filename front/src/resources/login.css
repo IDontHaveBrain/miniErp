@@ -1,0 +1,31 @@
+.Login-header
+{
+    background-color: #282c34;
+    min-height: 100vh;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(20px + 3vmin);
+    color: white;
+}
+
+.form-tag{
+    border-radius: 0px;
+    text-align: left !important;
+    text-align-last: left !important;
+}
+.f_label{
+    position: absolute;
+    left: 10px;
+    top:8px;
+    /* background: #{$col.white} */
+    padding: 2px 4px 4px;
+    line-height: 1em;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+.required{
+    color: red;
+}
