@@ -1,4 +1,6 @@
 import AppStore from "./AppStore";
+import LoginStore from "./login/LoginStore";
+import HomeStore from "./home/HomeStore";
 
 /*
 const RooStore = () => ({
@@ -11,7 +13,10 @@ export default RooStore;
 class RootStore {
   constructor() {
     this.appStore = new AppStore(this);
+    this.loginStore = new LoginStore(this);
+    this.homeStore = new HomeStore(this);
   }
 }
 
-export default new RootStore();
+const rootStore = new RootStore();
+export default rootStore;

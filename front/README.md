@@ -85,4 +85,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ## npm i history
 
-## npm i
+## yarn add --dev react-app-rewired
+
+## yarn add --dev customize-cra
+
+## npm install immutability-helper --save

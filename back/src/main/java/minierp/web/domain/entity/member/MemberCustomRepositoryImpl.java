@@ -3,6 +3,7 @@ package minierp.web.domain.entity.member;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.apache.el.lang.ExpressionBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
@@ -18,7 +19,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository{
     public RequestMemberDTO findByUsername (String username) {
 
         return queryFactory
-                .select(Projections.constructor(
+                .select(Projections.fields(
                         RequestMemberDTO.class,
                         member.memberId,
                         member.userName,

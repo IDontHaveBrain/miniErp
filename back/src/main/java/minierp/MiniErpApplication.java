@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.ldap.LdapProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 
-@EnableConfigurationProperties(value = {LdapProperties.class})
+//@EnableConfigurationProperties(value = {LdapProperties.class})
 @SpringBootApplication
 public class MiniErpApplication {
 

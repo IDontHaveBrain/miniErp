@@ -6,7 +6,7 @@ const test = inject("appStore")(
   observer(({ appStore }) => {
     console.log(appStore.getTest());
 
-    return <div>test입니다.</div>;
+    return <></>;
   })
 );
 

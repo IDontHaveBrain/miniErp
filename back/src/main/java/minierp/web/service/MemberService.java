@@ -62,15 +62,17 @@ public class MemberService {
     }
 
     public String login(RequestMemberDTO loginInfo) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginInfo.getMemberId(), loginInfo.getPw());
+        RequestMemberDTO member = memberRepository.findByUsername(loginInfo.getUsername());
 
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        if(member != null) {
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(member.getMemberId(), member.getPw());
 
-        String jwt = tokenProvider.createToken(authentication);
-
-        return jwt;
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return tokenProvider.createToken(authentication);
+        }
+        return null;
     }
 
 }

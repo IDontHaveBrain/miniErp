@@ -17,6 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static minierp.web.domain.entity.Role.*;
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -24,7 +26,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
     private final TokenProvider tokenProvider;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -47,8 +49,8 @@ public class SecurityConfig {
 
                 // jwt 인증 예외 처리.
                 .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .accessDeniedHandler(jwtAccessDeniedHandler)
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)//인증 실패
+                .accessDeniedHandler(jwtAccessDeniedHandler)//인가 실패
                 .and()
                 // jwt 인증 필터 등록.
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
@@ -59,7 +61,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/api/hello").hasRole(ADMIN.name())
                 .antMatchers("/api/signin").permitAll()
-                .antMatchers("/api/signup").permitAll()
+                .antMatchers("/api/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 //
@@ -67,5 +69,14 @@ public class SecurityConfig {
                 .httpBasic().disable();
 
         return http.build();
+    }
+
+    //cors 로컬 전체 승인
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+//                .exposedHeaders("X-AUTH-TOKEN")
+//                .allowCredentials(true)
+                .allowedOrigins("http://localhost:3000");
     }
 }
